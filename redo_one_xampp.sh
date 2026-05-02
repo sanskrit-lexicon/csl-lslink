@@ -4,6 +4,7 @@ echo "BEGIN ${dict}"
 txtout="data/${dict}_lslinks.txt"
 cmd="/c/xampp/php/php.exe lslinkscli.php ${dict} ../${dict} ${txtout}"
 echo $cmd
+echo ""
 $cmd
 wc -l "${txtout}"
 sqliteout="sqlite/${dict}_lslinks.sqlite"
