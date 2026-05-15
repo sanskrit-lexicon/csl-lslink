@@ -4,41 +4,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**csl-lslink** maps literary-source (`<ls>`) references in the CDSL dictionary XML files to their actual URLs. Each dictionary entry contains citations like `<ls>Rv. 1. 22. 16</ls>`; this repo resolves those citations to browsable links on the Cologne server.
+**csl-lslink** is a Sanskrit Lexicon **linking-tool** repository — part of the Cologne Digital Sanskrit Lexicon (CDSL) infrastructure.
 
-The output is a per-dictionary SQLite database and a zip archive, committed here for distribution. Dictionaries currently covered: AP, GRA, MW, PW, PWG.
+## Repo Category
 
-## Architecture
+`linking-tool` — see the [tooling runbook](https://github.com/sanskrit-lexicon/csl-observatory/blob/main/runbook/cologne-tooling-runbook.md) for category-specific conventions.
 
-| File/Directory | Purpose |
-|---|---|
-| `lslinkscli.php` | Core PHP script: parses `<dict>.xml`, extracts `<ls>` references, resolves URLs, writes tab-delimited output |
-| `make_sqlite.py` | Reads the tab-delimited output and creates `<dict>_lslinks.sqlite` |
-| `redo_one_xampp.sh` | Orchestration script for one dictionary: runs PHP → Python → zip |
-| `readme.txt` | Usage instructions and example log |
-| `zip/` | Committed zip archives of the sqlite outputs (tracked by git) |
+## GitHub Issue Conventions
 
-### Data flow
+This repository uses the **Cologne tooling-repo taxonomy**. All issues must have:
+- **Exactly one type label** (9 options)
+- **Exactly one severity label** (4 levels)
+- **One milestone** (5 options)
 
-For each dictionary `<dict>`:
-1. `lslinkscli.php <dict> <ap_dir> data/<dict>_lslinks.txt <dict>.xml` — parses XML, produces tab-delimited file with `ls_reference <TAB> url`
-2. `make_sqlite.py` — loads the tab file into `sqlite/<dict>_lslinks.sqlite` (not tracked by git)
-3. The sqlite is zipped into `zip/<dict>_lslinks.sqlite.zip` (tracked by git)
+### Type Labels
+- `bug` — Code defect (wrong output, broken contract)
+- `feature` — Net-new capability
+- `enhancement` — Improvement to existing capability
+- `performance` — Speed, memory, throughput optimization
+- `tech-debt` — Refactoring, cleanup, dependency updates
+- `security` — CVE, auth issue, credential exposure
+- `documentation` — Prose docs, API docs, comments
+- `infrastructure` — CI/CD, deploy, data pipelines, build tooling
+- `question` — Research, proposals, open discussions
 
-The `data/` and `sqlite/` directories are **not tracked** by git; only the `zip/` archives are committed.
+### Severity Labels
+- `trivial` — Cosmetic, < 1 hour
+- `minor` — Single function/component
+- `major` — Multiple files, design decision
+- `critical` — Blocks users, data loss/security CVE
 
-## Common Commands
+### Milestones
+- **API Stability** — performance, security, regressions
+- **User Experience** — bugs, features, enhancements
+- **Data Quality** — data-pipeline issues, integrity
+- **Developer Experience** — tech-debt, infrastructure, docs
+- **Community** — questions, proposals, discussions
 
-### Generate ls-links for one dictionary (XAMPP)
-```bash
-sh redo_one_xampp.sh <dict>
-# e.g.: sh redo_one_xampp.sh mw
-```
+## Cross-Repo Coordination
 
-The script expects XAMPP conventions — it reads `<dict>.xml` from the local XAMPP webroot and writes output under the repo working directory.
-
-## Dependencies
-
-- **PHP** (CLI) — for parsing XML and resolving URLs
-- **Python 3** — for `make_sqlite.py`
-- **Dictionary XML files** — from the local XAMPP/Cologne installation at the path expected by `lslinkscli.php`
+The org-level project [Tooling Roadmap](https://github.com/orgs/sanskrit-lexicon/projects/9) tracks tool work across all repositories.
